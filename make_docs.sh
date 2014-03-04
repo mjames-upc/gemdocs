@@ -8,6 +8,49 @@ rm -rf $DOCDIR/hlp/*
 rm -rf $DOCDIR/man/prog/*
 rm -rf $DOCDIR/man/parm/*
 
+# DECODERS
+cd $GEMHLP/hlp
+set progs=`ls *.hlp | sed 's,\.hlp$,,' | grep '^dc' | sort | uniq`
+
+foreach prog ($progs)
+   set pval=`echo $prog | tr '[:lower:]' '[:upper:]'`
+   cp $GEMHLP/hlp/${prog}.hlp $DOCDIR/hlp/
+   set LCLFIL=$DOCDIR/hlp/${prog}.hlp
+   set OUTFIL=$DOCDIR/man/prog/${prog}.html
+   if ( -e $LCLFIL ) then
+      echo '<\!doctype html>' > $OUTFIL
+      echo '<a href=../../help_and_documentation>GEMPAK Manual</a> | ' >> $OUTFIL
+      echo '<a href=../prog/>Programs</a><br><hr>' >> $OUTFIL
+      echo '<pre>' >> $OUTFIL
+      cat $LCLFIL >> $OUTFIL
+      echo '</pre>' >> $OUTFIL
+   endif
+   scp $OUTFIL conan:/content/software/gempak/man/prog/
+end
+
+# NPROGS
+
+cd $GEMHLP/hlp
+set progs=`ls *.hlp | sed 's,\.hlp$,,' | grep 'Index$' | sed 's@Index$@@' | sort | uniq`
+
+foreach prog ($progs)
+   set pval=`echo $prog | tr '[:lower:]' '[:upper:]'`
+   cp $GEMHLP/hlp/${prog}.hlp $DOCDIR/hlp/
+   set LCLFIL=$DOCDIR/hlp/${prog}.hlp
+   set OUTFIL=$DOCDIR/man/prog/${prog}.html
+   if ( -e $LCLFIL ) then
+      echo '<\!doctype html>' > $OUTFIL
+      echo '<a href=../../help_and_documentation>GEMPAK Manual</a> | ' >> $OUTFIL
+      echo '<a href=../prog/>Programs</a><br><hr>' >> $OUTFIL
+      echo '<pre>' >> $OUTFIL
+      cat $LCLFIL >> $OUTFIL
+      echo '</pre>' >> $OUTFIL
+   endif
+   scp $OUTFIL conan:/content/software/gempak/man/prog/
+end
+exit 0
+
+
 # PROGRAM FILES
 
 set progs=`ls $GEMPTXT | cut -d . -f1`
@@ -26,8 +69,8 @@ foreach prog ($progs)
          endif
       end
       echo '<\!doctype html>' > $OUTFIL
-      echo '<a href=../>GEMPAK Manual</a> | ' >> $OUTFIL
-      echo '<a href=../prog/>GEMPAK Programs</a><br><hr>' >> $OUTFIL
+      echo '<a href=../../help_and_documentation>GEMPAK Manual</a> | ' >> $OUTFIL
+      echo '<a href=../prog/>Programs</a><br><hr>' >> $OUTFIL
       echo '<pre>' >> $OUTFIL
       cat $LCLFIL >> $OUTFIL
       echo '</pre>' >> $OUTFIL
@@ -57,8 +100,8 @@ foreach parm ($parms)
       echo '<\!doctype html>' > $OUTFIL
       #echo '<title> '$val1' : GEMPAK Manual</title>' >> $OUTFIL
       #echo '<link rel=StyleSheet href=/software/gempak/tutorial/md.css TYPE="text/css"> ' >> $OUTFIL
-      echo '<a href=../>GEMPAK Manual</a> | ' >> $OUTFIL
-      echo '<a href=../prog/>GEMPAK Programs</a><br><hr>' >> $OUTFIL
+      echo '<a href=../../help_and_documentation>GEMPAK Manual</a> | ' >> $OUTFIL
+      echo '<a href=../prog/>Programs</a> | <a href=../parm/>Parameters</a><br><hr>' >> $OUTFIL
       echo '<pre>' >> $OUTFIL
       cat $LCLFIL >> $OUTFIL
       echo '</pre>' >> $OUTFIL
