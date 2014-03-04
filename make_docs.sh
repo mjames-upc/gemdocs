@@ -1,21 +1,21 @@
 #!/bin/csh -f
 
 source /home/gempak/NAWIPS/Gemenviron
-set CGIDIR=/home/mjames/gemdocs/
-if ( ! -e $CGIDIR ) exit 0
+set DOCDIR=/home/mjames/gemdocs/
+if ( ! -e $DOCDIR ) exit 0
 
-rm -rf $CGIDIR/hlp/*
-rm -rf $CGIDIR/man/prog/*
-rm -rf $CGIDIR/man/parm/*
+rm -rf $DOCDIR/hlp/*
+rm -rf $DOCDIR/man/prog/*
+rm -rf $DOCDIR/man/parm/*
 
 # PROGRAM FILES
 
 set progs=`ls $GEMPTXT | cut -d . -f1`
 foreach prog ($progs)
    set pval=`echo $prog | tr '[:lower:]' '[:upper:]'`
-   cp $GEMHLP/hlp/${prog}.hlp $CGIDIR/hlp/
-   set LCLFIL=$CGIDIR/hlp/${prog}.hlp
-   set OUTFIL=$CGIDIR/man/prog/${prog}.html
+   cp $GEMHLP/hlp/${prog}.hlp $DOCDIR/hlp/
+   set LCLFIL=$DOCDIR/hlp/${prog}.hlp
+   set OUTFIL=$DOCDIR/man/prog/${prog}.html
    if ( -e $LCLFIL ) then 
       set parms=`ls $GEMHLP/hlx/*.hl2 | cut -d / -f8 | cut -d . -f1`
       foreach parm ($parms)
@@ -40,9 +40,9 @@ end
 #set parms=`ls $GEMHLP/hlx/*.hl2 | cut -d / -f8 | cut -d . -f1`
  
 foreach parm ($parms)
-   cp $GEMHLP/hlx/${parm}.hl2 $CGIDIR/hlp/
-   set LCLFIL=$CGIDIR/hlp/${parm}.hl2
-   set OUTFIL=$CGIDIR/man/parm/${parm}.html
+   cp $GEMHLP/hlx/${parm}.hl2 $DOCDIR/hlp/
+   set LCLFIL=$DOCDIR/hlp/${parm}.hl2
+   set OUTFIL=$DOCDIR/man/parm/${parm}.html
    set val1=`echo $parm | tr '[:lower:]' '[:upper:]'`
 
    if ( -e $LCLFIL ) then
@@ -66,8 +66,6 @@ foreach parm ($parms)
    scp $OUTFIL conan:/content/software/gempak/man/parm/
 end
 
-#tar -cf gempak_prog_parm_html.tar $CGIDIR/man
-#scp gempak_prog_parm_html.tar conan:/content/software/gempak/
 exit 0
 
 
